@@ -1,0 +1,36 @@
+# Author-owned articles/projects are managed outside the source repository.
+/publications/
+
+# Secrets, server inventory and workstation state.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+服务器.txt
+部署记录.md
+_github/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Generated output and private runtime data.
+**/__pycache__/
+*.py[cod]
+/blog/dist/
+/blog/releases/
+/blog/current
+/blog/current-*
+/blog/.current-*
+/blog/runtime/
+/blog/.publish.lock
+/blog/deploy/backups/
+/blog/deploy/publish-history/
+*.sqlite3
+*.sqlite3-*
+*.db
+*.log
+*.tar.gz

@@ -1,0 +1,9 @@
+{
+  "title": "我的项目 / My project",
+  "date": "2026-10-19",
+  "subtitle": "一句项目副标题 / A short subtitle",
+  "tags": ["Personal project"],
+  "order": 10,
+  "image_fit": "contain",
+  "published": false
+}

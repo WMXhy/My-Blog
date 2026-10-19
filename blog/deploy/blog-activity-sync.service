@@ -1,0 +1,21 @@
+[Unit]
+Description=Sync public GitHub and Gitee activity for XingKuiJueLong blog
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=www
+Group=www
+WorkingDirectory=/www/web/blog
+ExecStart=/usr/bin/python3 /www/web/blog/activity/sync.py --force
+TimeoutStartSec=180
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/www/web/blog/runtime
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+MemoryMax=192M

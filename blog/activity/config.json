@@ -1,0 +1,16 @@
+{
+  "calendar_interval_seconds": 86400,
+  "request_timeout_seconds": 20,
+  "platforms": {
+    "github": {
+      "username": "WMXhy",
+      "profile": "https://github.com/WMXhy",
+      "repositories": ["WMXhy/My-Blog", "WMXhy/The-desk-favorite-of-Chat-GPT", "WMXhy/QtPackager", "WMXhy/Qt", "WMXhy/-FormatConversion"]
+    },
+    "gitee": {
+      "username": "awakening-and-feeling-deaf",
+      "profile": "https://gitee.com/awakening-and-feeling-deaf",
+      "repositories": ["awakening-and-feeling-deaf/date-base", "awakening-and-feeling-deaf/qt-packaging", "awakening-and-feeling-deaf/xchat", "awakening-and-feeling-deaf/test_c", "awakening-and-feeling-deaf/management-information-system", "awakening-and-feeling-deaf/small-objects"]
+    }
+  }
+}
