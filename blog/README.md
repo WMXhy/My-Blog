@@ -6,6 +6,7 @@
 
 - `build.py`：静态页面生成。
 - `library.py`：文章/项目文件夹与相对 Markdown 页面。
+- `about.py`：读取 publications/about 下的资料、正文和头像。
 - `init_content.py`：初始化仓库根目录中被 Git 忽略的 publications。
 - `publish.py`：Linux 上检查并原子发布。
 - `validate.py`：页面元信息、本地链接、锚点和图片检查。

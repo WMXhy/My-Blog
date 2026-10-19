@@ -8,6 +8,7 @@ import json
 import re
 import shutil
 from library import load_library
+from about import load_about
 from datetime import date, datetime, timezone
 from pathlib import Path
 from urllib.parse import unquote
@@ -263,6 +264,15 @@ def head(eyebrow, title, description):
     return f'<div class="page-head"><span class="eyebrow">{e(eyebrow)}</span><h1>{e(title)}</h1><p>{e(description)}</p></div>'
 
 
+def about_body(profile):
+    image = f'<img class="profile-avatar" src="{e(profile["image"])}" alt="{e(profile["name"])} 的头像" decoding="async">' if profile['image'] else avatar()
+    links = ''.join(external(profile[key], label) for key, label in [('github', 'GitHub'), ('gitee', 'Gitee')] if profile[key])
+    interests = f'<h3>{e(profile["interests_title"])}</h3><div class="interest-list">' + ''.join(f'<span>{e(value)}</span>' for value in profile['interests']) + '</div>' if profile['interests'] else ''
+    wishes = f'<h3>{e(profile["wishlist_title"])}</h3><ul class="wish-list">' + ''.join(f'<li><span>{e(wish["label"])}</span><small>{e(wish["status"])}</small></li>' for wish in profile['wishes']) + '</ul>' if profile['wishes'] else ''
+    quote = '<blockquote class="about-quote">' + '<br>'.join(e(line) for line in profile['quote'].splitlines()) + '</blockquote>' if profile['quote'] else ''
+    return f'<div class="about-grid"><aside class="profile-card"><div class="avatar profile-avatar-frame">{image}</div><h2>{e(profile["name"])}</h2><p>{e(profile["role"])}</p>{tags(profile["tags"])}<div class="social-row">{links}</div></aside><div class="about-copy"><h2>你好，我是 {e(profile["name"])} <span aria-hidden="true">✿</span></h2><div class="prose about-prose">{profile["html"]}</div>{interests}{wishes}{quote}</div></div>'
+
+
 def contribution_section():
     return f'''<section class="section code-garden" id="code-garden" data-activity aria-labelledby="garden-title">
 <div class="section-heading"><div><span class="eyebrow">A LITTLE CODE GARDEN</span><h2 id="garden-title">代码小花园</h2></div><div class="source-switch" role="group" aria-label="贡献数据来源"><button type="button" data-source="all" aria-pressed="true" disabled>总</button><button type="button" data-source="github" aria-pressed="false" disabled>GitHub</button><button type="button" data-source="gitee" aria-pressed="false" disabled>Gitee</button></div></div>
@@ -278,7 +288,10 @@ def contribution_section():
 
 def build(library=None):
     global POSTS, PROJECTS
-    POSTS, PROJECTS, media = load_library(library or ROOT.parent / 'publications', markdown)
+    library = library or ROOT.parent / 'publications'
+    POSTS, PROJECTS, media = load_library(library, markdown)
+    profile, about_media = load_about(library, SITE, markdown)
+    media.update(about_media)
     OUT.mkdir(exist_ok=True)
     shutil.copytree(ROOT / 'assets', OUT / 'assets', dirs_exist_ok=True)
     for relative, data in media.items():
@@ -311,8 +324,7 @@ def build(library=None):
     projects += f'<div class="projects-intro"><span>精选 {len(PROJECTS)} 个项目 · 持续整理中</span>{socials()}</div><div class="project-grid">{project_cards}</div><div class="soft-box"><p>更多代码可以到我的 GitHub 和 Gitee 主页逛逛。这里收集项目介绍、详细记录和相关链接；首页的代码小花园已接入官方贡献日历与公开 Push 足迹。</p></div>'
     page('/projects/', '项目', projects, 'projects')
 
-    about = head('HELLO, NICE TO MEET YOU', '认识一下，小屋的主人', '不用很厉害才开始。把每一次探索，都认真地放进自己的小小世界。')
-    about += f'''<div class="about-grid"><aside class="profile-card"><div class="avatar profile-avatar-frame">{avatar()}</div><h2>{e(SITE['name'])}</h2><p>大学生 / 代码探索者 / 生活记录者</p>{tags(['保持好奇', '慢慢生长'])}{socials()}</aside><div class="about-copy"><h2>你好，我是 {e(SITE['name'])} <span aria-hidden="true">✿</span></h2><p>欢迎来到我的个人小屋。我是一名大学生，希望用这个空间，把学习、项目和生活中想留下的片刻慢慢整理起来。</p><p>这里有我的学习笔记，也有放在 GitHub 和 Gitee 上的代码。小屋会随着新的想法一点点变化，认真记录，也给有趣的事情留一点位置。</p><h3>这个小屋，关心这些小事</h3><div class="interest-list"><span>编程与项目</span><span>学习笔记</span><span>日常碎片</span><span>可爱的交互</span></div><h3>还想慢慢完成的事</h3><ul class="wish-list"><li><span>GitHub / Gitee 代码小花园</span><small>已上线</small></li><li><span>花朵翻翻乐，随手玩一小会儿</span><small>已上线</small></li><li><span>持续写文章，为作品补上更多故事</span><small>慢慢积累</small></li></ul><blockquote class="about-quote">今天也在慢慢生长。<br>愿我们都能做一点自己喜欢的事。</blockquote></div></div>'''
+    about = head(profile['eyebrow'], profile['page_title'], profile['description']) + about_body(profile)
     page('/about/', '关于我', about, 'about')
 
     for post in POSTS:

@@ -14,6 +14,7 @@ Cream, sage green, and a little dusty rose. This repository contains the source 
 - **Flower memory:** a 16-card matching game with elapsed time, a browser-local personal best, and background-tab pause.
 - **Gentle themes:** cream, night green, and system preference, remembered by the browser.
 - **Neighbourhood:** friend links and a copyable site introduction.
+- **About page:** edit text, profile details, interests, wishes, and an avatar in the external content library without changing page code.
 - **Mobile reading:** calendars and tables scroll within their own regions; reduced-motion preferences are respected.
 
 The Markdown renderer supports local images, animated GIFs, tables, code fences, simple lists, and quotations. Link `content.md` and `content.en.md` to publish bilingual detail pages. Site navigation is primarily Chinese; language pages use author-supplied text and do not provide automatic translation.
@@ -54,7 +55,8 @@ My-Blog/
 ├── examples/                     Generic draft templates
 └── publications/                 Created locally; ignored by Git
     ├── articles/my-first-post/   One folder per article
-    └── projects/my-project/      One folder per project
+    ├── projects/my-project/      One folder per project
+    └── about/                   About-page profile and text
 ```
 
 Each entry contains `meta.json`, an optional `cover.png/jpg/gif`, `link.txt`, `summary.md`, and `content.md`. Add `content.en.md` for English text. Copy a template, rename the folder, edit the files, and set `published` to `true`. On the server:
@@ -65,6 +67,8 @@ python3 blog/publish.py          # Validate and publish
 ```
 
 A failed build leaves the live release intact. To unpublish an entry, set `published` to `false` and publish again. Uploading files does not immediately publish them, and the daily activity sync does not publish editorial content.
+
+The about page reads `publications/about/meta.json`, `content.md`, and an optional `avatar.jpg/png/gif`. Publish changes with the same command. Initialization provides generic examples; real profile data stays in the ignored library.
 
 ## Configuration and checks
 

@@ -62,6 +62,16 @@ publications/
 
 已上传的 Markdown 可用相对链接引用，如 `[说明](docs/install.md)`；`[动画](previews/)` 会读取该目录的 README.md。子页图片相对于子页解析，返回主文稿可写 `../content.md`。目标必须位于同一篇文章/项目内；文件没上传时显示普通文字，不自动获取远程仓库资料。原始 Markdown、脚本和配置不直接公开。
 
+## 关于我
+
+初始化还会创建 `publications/about/`。编辑 content.md 修改主要介绍，meta.json 修改资料，可选放入一张 avatar.jpg/png/gif/webp 作为该页头像。正文支持同目录图片和表格。
+
+常用字段：name（昵称）、role（身份）、page_title（页面标题）、description（开场介绍）、tags（标签数组）、github/gitee（链接）、interests（兴趣数组）、wishes（愿望数组）、quote（签名）。愿望格式为 `{"label":"想做的事","status":"进行中"}`；签名用 `\n` 换行。interests_title 和 wishlist_title 可修改区域标题，eyebrow 可修改顶部英文小字。
+
+数组设为 `[]` 可清空对应区域，链接和签名可设为空字符串。只保留一张 avatar 图片。不存在 about 目录时使用默认介绍；目录存在但内容或元数据错误时阻止发布并保留旧版本。
+
+这些资料用于关于我页面；全站品牌与首页资料仍由站点配置维护。真实关于我资料与其他 publications 内容一样被 Git 忽略。使用下面相同的发布命令更新页面。
+
 ## 发布与撤下
 
 Linux 服务器执行：

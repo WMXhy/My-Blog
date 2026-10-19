@@ -6,6 +6,7 @@ Start with the [repository README](../README.en.md).
 
 - `build.py`: static page generation.
 - `library.py`: folder-managed entries and linked Markdown pages.
+- `about.py`: read profile data, text, and an avatar from publications/about.
 - `init_content.py`: create the ignored publications library at the repository root.
 - `publish.py`: validate and publish atomically on Linux.
 - `validate.py`: metadata, local links, anchors, and image checks.

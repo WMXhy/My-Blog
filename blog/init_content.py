@@ -11,8 +11,8 @@ def initialize():
     examples = ROOT.parent / 'examples'
     if not examples.is_dir():
         raise SystemExit('Missing examples directory. Run this script from a complete repository checkout.')
-    for kind, template in [('articles', 'article'), ('projects', 'project')]:
-        destination = library / kind / '_template'
+    for relative, template in [('articles/_template', 'article'), ('projects/_template', 'project'), ('about', 'about')]:
+        destination = library / relative
         destination.mkdir(parents=True, exist_ok=True)
         for source in (examples / template).iterdir():
             target = destination / source.name

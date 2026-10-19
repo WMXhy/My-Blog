@@ -53,6 +53,28 @@ def external_url(value, folder):
     return value
 
 
+def local_image(folder, reference, namespace, media):
+    parsed = urlsplit(reference)
+    if parsed.scheme or parsed.netloc or parsed.query or parsed.fragment or parsed.path.startswith(('/', '\\')):
+        raise ValueError(f'{folder}: 图片请使用当前文件夹内的相对路径：{reference}')
+    file = safe_file(folder, unquote(parsed.path))
+    suffix = file.suffix.lower()
+    if suffix not in IMAGE_TYPES:
+        raise ValueError(f'{file}: 图片支持 png/jpg/jpeg/gif/webp，误写为 jbg 的 JPEG 也可识别')
+    data = file.read_bytes()
+    valid = (suffix == '.png' and data.startswith(b'\x89PNG\r\n\x1a\n')
+             or suffix in ('.jpg', '.jpeg', '.jbg') and data.startswith(b'\xff\xd8\xff')
+             or suffix == '.gif' and data[:6] in (b'GIF87a', b'GIF89a')
+             or suffix == '.webp' and data.startswith(b'RIFF') and data[8:12] == b'WEBP')
+    if not valid:
+        raise ValueError(f'{file}: 图片内容与扩展名不符，请放入真实图片')
+    relative = file.relative_to(folder.resolve())
+    extension = '.jpg' if suffix == '.jbg' else suffix
+    output = Path('media') / namespace / relative.parent / f'{relative.stem}-{hashlib.sha256(data).hexdigest()[:12]}{extension}'
+    media[output] = data
+    return '/' + quote(output.as_posix(), safe='/')
+
+
 def load_library(root, render):
     root = Path(root)
     media, entries = {}, {'articles': [], 'projects': []}
@@ -104,25 +126,7 @@ def load_library(root, render):
                 return base + 'read/' + quote(Path(relative).with_suffix('').as_posix(), safe='/') + '/'
 
             def image_url(reference, folder=folder, kind=kind):
-                parsed = urlsplit(reference)
-                if parsed.scheme or parsed.netloc or parsed.query or parsed.fragment or parsed.path.startswith(('/', '\\')):
-                    raise ValueError(f'{folder}: 正文图片请使用当前文件夹内的相对路径：{reference}')
-                file = safe_file(folder, unquote(parsed.path))
-                suffix = file.suffix.lower()
-                if suffix not in IMAGE_TYPES:
-                    raise ValueError(f'{file}: 图片支持 png/jpg/jpeg/gif/webp，误写为 jbg 的 JPEG 也可识别')
-                data = file.read_bytes()
-                valid = (suffix == '.png' and data.startswith(b'\x89PNG\r\n\x1a\n')
-                         or suffix in ('.jpg', '.jpeg', '.jbg') and data.startswith(b'\xff\xd8\xff')
-                         or suffix == '.gif' and data[:6] in (b'GIF87a', b'GIF89a')
-                         or suffix == '.webp' and data.startswith(b'RIFF') and data[8:12] == b'WEBP')
-                if not valid:
-                    raise ValueError(f'{file}: 图片内容与扩展名不符，请放入真实图片')
-                relative = file.relative_to(folder.resolve())
-                extension = '.jpg' if suffix == '.jbg' else suffix
-                output = Path('media') / kind / folder.name / relative.parent / f'{relative.stem}-{hashlib.sha256(data).hexdigest()[:12]}{extension}'
-                media[output] = data
-                return '/' + quote(output.as_posix(), safe='/')
+                return local_image(folder, reference, Path(kind) / folder.name, media)
 
             covers = [file for file in folder.iterdir() if file.is_file() and file.stem.lower() == 'cover' and file.suffix.lower() in IMAGE_TYPES]
             if len(covers) > 1:

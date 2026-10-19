@@ -52,6 +52,16 @@ Link `[English](content.en.md)` from content.md, and `[简体中文](content.md)
 
 Link uploaded Markdown with relative paths, such as `[Guide](docs/install.md)`. A directory link such as `[Animations](previews/)` renders that directory's README.md. Images resolve relative to each document; a nested page can link back with `../content.md`. Targets must stay within the entry folder. Missing targets remain plain text; remote repository content is not fetched automatically. Raw Markdown, executable scripts, and configuration are not directly published.
 
+## About page
+
+Initialization also creates `publications/about/`. Edit content.md for the introduction and meta.json for profile fields. Optionally add one avatar.jpg/png/gif/webp file. Body images and tables are supported.
+
+Common fields are name, role, page_title, description, tags, github, gitee, interests, wishes, and quote. Tags and interests are arrays of strings. A wish uses `{"label":"A goal","status":"In progress"}`. Use `\n` for signature line breaks. interests_title, wishlist_title, and eyebrow control section labels.
+
+Empty arrays hide optional lists; links and the quote can be empty strings. Keep only one avatar image. If the entire about directory is absent, a default introduction is used. Invalid existing files stop publication and preserve the live release.
+
+These settings affect the about page; global branding and the homepage remain in site configuration. Real profile data remains Git-ignored with the rest of publications. Use the same publication commands below.
+
 ## Publish and unpublish
 
 On Linux:

@@ -14,6 +14,7 @@
 - **轻松一小局**：花朵翻翻乐，16 张卡片配对、计时、本机最佳成绩，离开标签页时暂停。
 - **温柔的配色**：奶油白、静夜绿和跟随系统，浏览器记住偏好。
 - **友邻小径**：友链卡片与可复制的小屋名片。
+- **关于我**：在外部内容目录编辑正文、资料、兴趣、愿望清单和头像，不必修改页面代码。
 - **移动端阅读**：日历与表格在各自区域内横向滚动，减少动态效果偏好也会被尊重。
 
 Markdown 支持本地图片、GIF、表格、代码块、基本列表与引用；`content.md` / `content.en.md` 可互相链接并生成中英文详情页。站点导航目前以中文为主，多语言切换针对作者提供的正文，不自动翻译内容。
@@ -54,7 +55,8 @@ My-Blog/
 ├── examples/                     通用草稿模板
 └── publications/                 初始化后创建，不进 Git
     ├── articles/my-first-post/   一篇文章一个文件夹
-    └── projects/my-project/      一个项目一个文件夹
+    ├── projects/my-project/      一个项目一个文件夹
+    └── about/                   关于我的资料与正文
 ```
 
 每个内容文件夹包括 `meta.json`、可选的 `cover.png/jpg/gif`、`link.txt`、`summary.md` 和 `content.md`。需要英文版时加 `content.en.md`。复制模板、改名并填好内容，将 `published` 改为 `true` 后，在服务器运行：
@@ -65,6 +67,8 @@ python3 blog/publish.py          # 检查通过后上线
 ```
 
 失败时保留线上旧版本。撤下内容只需把 `published` 改回 `false` 再发布。上传文件不会自动触发上线，贡献数据的每日同步也不会替你发布文稿。
+
+“关于我”使用 `publications/about/meta.json`、`content.md` 和可选的 `avatar.jpg/png/gif`，修改后运行同一条发布命令。初始化提供通用示例，真实资料继续保留在被 Git 忽略的目录里。
 
 ## 配置与检查
 
